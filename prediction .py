@@ -57,4 +57,3 @@ if prediction[0] == 1:
     print("\nPrediction: Diabetic")
 else:
     print("\nPrediction: Not Diabetic")
-
