@@ -1,27 +1,60 @@
-# Prediction of Diabetes Using Classification Algorithms
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
 
-## Project Overview
-Prediction of Diabetes Using Classification Algorithms project developed using Python and Machine Learning techniques to predict the likelihood of diabetes in patients based on medical and health-related data.
+# Sample Diabetes Dataset
+data = {
+    'Glucose': [120, 85, 150, 95, 140, 110, 130, 100],
+    'BloodPressure': [70, 65, 80, 72, 85, 75, 78, 68],
+    'BMI': [30, 25, 35, 28, 33, 27, 31, 26],
+    'Age': [45, 30, 50, 29, 48, 35, 42, 31],
+    'Outcome': [1, 0, 1, 0, 1, 0, 1, 0]
+}
 
-## Tools Used
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- Machine Learning
+# Create DataFrame
+df = pd.DataFrame(data)
 
-## Project Features
-- Data Preprocessing and Cleaning
-- Exploratory Data Analysis (EDA)
-- Classification Model Training
-- Accuracy Evaluation and Prediction
-- Healthcare Data Analysis
+# Features and Target
+X = df.drop('Outcome', axis=1)
+y = df['Outcome']
 
-## Key Insights
-- Machine learning algorithms were used to predict diabetes with improved accuracy
-- Data preprocessing and feature selection enhanced model performance
-- Classification models helped identify patterns in patient health data
+# Split Data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
-## Project Files
-- diabetes_prediction.py
-- README.md
+# Feature Scaling
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Train Model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+# Classification Report
+print("\nClassification Report:\n")
+print(classification_report(y_test, y_pred))
+
+# Custom Prediction
+sample_data = [[135, 80, 32, 40]]
+
+sample_scaled = scaler.transform(sample_data)
+
+prediction = model.predict(sample_scaled)
+
+if prediction[0] == 1:
+    print("\nPrediction: Diabetic")
+else:
+    print("\nPrediction: Not Diabetic")
+
